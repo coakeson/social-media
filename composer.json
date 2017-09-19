@@ -1,0 +1,10 @@
+{
+  "name": "younique/social",
+  "type": "library",
+  "description": "A PHP wrapper for social APIs",
+  "autoload": {
+    "psr-4" : {
+      "Younique\\Social\\": "src/"
+    }
+  }
+}
