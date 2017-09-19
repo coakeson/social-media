@@ -1,5 +1,5 @@
 {
-  "name": "coakeson/socialMedia",
+  "name": "coakeson/social-media",
   "type": "library",
   "description": "A PHP wrapper for social APIs",
   "autoload": {
