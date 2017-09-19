@@ -1,5 +1,5 @@
 {
-  "name": "younique/social",
+  "name": "coakeson/socialMedia",
   "type": "library",
   "description": "A PHP wrapper for social APIs",
   "autoload": {
