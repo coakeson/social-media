@@ -46,17 +46,16 @@ YouniqueFacebook.PHOTO_TYPE_ALBUM = 'album';
  * @param height
  * @returns {string}
  */
-YouniqueFacebook.prototype.getPhotoURL = function(facebookId, type, width, height){
-    if(type === undefined){
-        type = 'normal';
-    }
+YouniqueFacebook.prototype.getPhotoURL = function(facebookId, options){
+    options = options || {};
+    options.type = options.type || 'normal';
 
-    var url = this.baseURL + '/' + facebookId + '/picture?type=' + type;
-    if(width){
-        url += '&width=' . width;
+    var url = this.baseURL + '/' + facebookId + '/picture?type=' + options.type;
+    if(options.width){
+        url += '&width=' . options.width;
     }
-    if(height) {
-        url += '&height=' . height;
+    if(options.height) {
+        url += '&height=' . options.height;
     }
 
     return url;
@@ -69,31 +68,33 @@ YouniqueFacebook.prototype.getPhotoURL = function(facebookId, type, width, heigh
  * @param options
  * @returns {*}
  */
-YouniqueFacebook.prototype.getPhotoImageHTML = function(facebookId, type, options){
+YouniqueFacebook.prototype.getPhotoImageHTML = function(facebookId, options){
     if(!facebookId){
         // TODO: return a blank profile pic
         //return $this->Html->image("blank_profile_pic.svg", array("class" => "svg", "nopin" => "no-pin", "alt" => $order->buyer));
         return 'Blank profile pic';
     }
 
-    var output = '<img src="' + this.getPhotoURL(facebookId, type) + '"';
-    if(options) {
-        if (options.class) {
-            if (Array.isArray(options.class)) {
-                // Flatten to a string
-                options.class = options.class.join(' ');
-            }
-            output += ' class="' + options.class + '"';
-        }
+    var output = '<img src="' + this.getPhotoURL(facebookId, options) + '"';
 
-        if (options.alt) {
-            output += ' alt="' + escapeHtml(options.alt) + '"';
-        }
+    options = options || {};
 
-        if (options.title) {
-            output += ' title="' + escapeHtml(options.title) + '"';
+    if (options.class) {
+        if (Array.isArray(options.class)) {
+            // Flatten to a string
+            options.class = options.class.join(' ');
         }
+        output += ' class="' + options.class + '"';
     }
+
+    if (options.alt) {
+        output += ' alt="' + escapeHtml(options.alt) + '"';
+    }
+
+    if (options.title) {
+        output += ' title="' + escapeHtml(options.title) + '"';
+    }
+
     output += ' />';
     return output;
 };
