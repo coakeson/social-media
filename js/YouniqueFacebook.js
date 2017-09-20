@@ -32,11 +32,13 @@ YouniqueFacebook.instance = function(){
  * Static Constants
  * @type {string}
  */
-YouniqueFacebook.PHOTO_TYPE_SMALL = 'small';
-YouniqueFacebook.PHOTO_TYPE_NORMAL = 'normal';
-YouniqueFacebook.PHOTO_TYPE_LARGE = 'large';
-YouniqueFacebook.PHOTO_TYPE_SQUARE = 'square';
-YouniqueFacebook.PHOTO_TYPE_ALBUM = 'album';
+YouniqueFacebook.PHOTO_TYPES = {
+    small: 'small',
+    normal: 'normal',
+    large: 'large',
+    square: 'square',
+    album: 'album'
+};
 
 /**
  * Gets the graph API URL for the passed ID with options
@@ -48,7 +50,8 @@ YouniqueFacebook.PHOTO_TYPE_ALBUM = 'album';
  */
 YouniqueFacebook.prototype.getPhotoURL = function(facebookId, options){
     options = options || {};
-    options.type = options.type || 'normal';
+    // Make sure we have a valid photo type or default to normal
+    options.type = (YouniqueFacebook.PHOTO_TYPES[options.type] ? options.type : YouniqueFacebook.PHOTO_TYPES.normal);
 
     var url = this.baseURL + '/' + facebookId + '/picture?type=' + options.type;
     if(options.width){
