@@ -30,6 +30,10 @@ class YouniqueFacebook{
         $this->version = $version;
     }
 
+    public function getVersion(){
+        return $this->version;
+    }
+
     private function getBaseURL(){
         return 'https://graph.facebook.com/' . $this->version;
     }
@@ -84,6 +88,14 @@ class YouniqueFacebook{
         return $output;
     }
 
+    public function getFacebookObject(){
+        return new \Facebook\Facebook([
+            'app_id' => set_env('FACEBOOK_APP_ID'),
+            'app_secret' => set_env('FACEBOOK_SECRET'),
+            'default_graph_version' => $this->version,
+        ]);
+    }
+
     /**
      * Returns a single string that includes everything to allow Facebook JS calls on a page
      *
@@ -97,6 +109,7 @@ class YouniqueFacebook{
             'xfbml' => true,
             'status' => true,
             'logPageView' => true,
+            'additionalInitScripts' => NULL,
         );
 
         return '
@@ -111,6 +124,7 @@ class YouniqueFacebook{
                 });
                 
                 ' . ($options['logPageView'] ? 'FB.AppEvents.logPageView();' : '') . '
+                ' . ($options['additionalInitScripts'] ? $options['additionalInitScripts'] : '') . '
             };
             
             (function(d, s, id){
