@@ -84,26 +84,41 @@ class YouniqueFacebook{
         return $output;
     }
 
-    public function getJSInitScriptHTML(){
+    /**
+     * Returns a single string that includes everything to allow Facebook JS calls on a page
+     *
+     * @param array $options
+     * @return string
+     */
+    public function getJSInitScriptHTML($options = array()){
+        // Set defaults
+        $options += array(
+            'cookie' => true,
+            'xfbml' => true,
+            'status' => true,
+            'logPageView' => true,
+        );
 
         return '
         <script type="text/javascript" data-meta="Facebook Init">
             window.fbAsyncInit = function() {
                 FB.init({
                     appId      : ' . set_env('FACEBOOK_APP_ID') . ',
-                    cookie     : true, // set sessions cookies to allow your server to access the session?
-                    xfbml      : true,
+                    cookie     : ' . ($options['cookie'] ? 'true' : 'false') . ',
+                    xfbml      : ' . ($options['xfbml'] ? 'true' : 'false') . ',
+                    status     : ' . ($options['status'] ? 'true' : 'false') . ',
                     version    : "' . $this->version . '"
                 });
-                FB.AppEvents.logPageView();
+                
+                ' . ($options['logPageView'] ? 'FB.AppEvents.logPageView();' : '') . '
             };
             
             (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
             }(document, "script", "facebook-jssdk"));
         </script>
         ';
