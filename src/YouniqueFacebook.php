@@ -26,7 +26,7 @@ class YouniqueFacebook{
         return $obj;
     }
 
-    public function __construct($version = 'v2.10'){
+    public function __construct($version = 'v2.9'){
         $this->version = $version;
     }
 
@@ -85,17 +85,15 @@ class YouniqueFacebook{
     }
 
     public function getJSInitScriptHTML(){
-        $api_version = 'v2.8';
-        $app_id = set_env('FACEBOOK_APP_ID');
 
         return '
         <script type="text/javascript" data-meta="Facebook Init">
             window.fbAsyncInit = function() {
                 FB.init({
-                    appId      : ' . $app_id . ',
+                    appId      : ' . set_env('FACEBOOK_APP_ID') . ',
                     cookie     : true, // set sessions cookies to allow your server to access the session?
                     xfbml      : true,
-                    version    : "' . $api_version . '"
+                    version    : "' . $this->version . '"
                 });
                 FB.AppEvents.logPageView();
             };

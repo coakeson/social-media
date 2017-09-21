@@ -12,7 +12,7 @@ function escapeHtml(text) {
 }
 
 function YouniqueFacebook(version){
-    this.version = (version ? version : 'v2.10');
+    this.version = version || 'v2.9';
     this.baseURL = 'https://graph.facebook.com/' + this.version;
 }
 
