@@ -40,6 +40,10 @@ YouniqueFacebook.PHOTO_TYPES = {
     album: 'album'
 };
 
+YouniqueFacebook.prototype.getBaseURL = function(){
+  return this.baseURL;
+};
+
 /**
  * Gets the graph API URL for the passed ID with options
  * @param facebookId
@@ -49,6 +53,10 @@ YouniqueFacebook.PHOTO_TYPES = {
  * @returns {string}
  */
 YouniqueFacebook.prototype.getPhotoURL = function(facebookId, options){
+    if(!facebookId){
+        return null;
+    }
+
     options = options || {};
     // Make sure we have a valid photo type or default to normal
     options.type = (YouniqueFacebook.PHOTO_TYPES[options.type] ? options.type : YouniqueFacebook.PHOTO_TYPES.normal);
@@ -73,9 +81,7 @@ YouniqueFacebook.prototype.getPhotoURL = function(facebookId, options){
  */
 YouniqueFacebook.prototype.getPhotoImageHTML = function(facebookId, options){
     if(!facebookId){
-        // TODO: return a blank profile pic
-        //return $this->Html->image("blank_profile_pic.svg", array("class" => "svg", "nopin" => "no-pin", "alt" => $order->buyer));
-        return 'Blank profile pic';
+        return null;
     }
 
     var output = '<img src="' + this.getPhotoURL(facebookId, options) + '"';

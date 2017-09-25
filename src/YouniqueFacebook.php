@@ -34,8 +34,16 @@ class YouniqueFacebook{
         return $this->version;
     }
 
+    public function getAppId(){
+        return set_env('FACEBOOK_APP_ID');
+    }
+
+    public function getSecret(){
+        return set_env('FACEBOOK_SECRET');
+    }
+
     private function getBaseURL(){
-        return 'https://graph.facebook.com/' . $this->version;
+        return 'https://graph.facebook.com/' . $this->getVersion();
     }
 
     /**
@@ -47,6 +55,10 @@ class YouniqueFacebook{
      * @return string
      */
     public function getPhotoURL($facebook_id, $type = self::PHOTO_TYPE_NORMAL, $width = NULL, $height = NULL){
+        if(empty($facebook_id)){
+            return null;
+        }
+
         $url = $this->getBaseURL() . '/' . $facebook_id . '/picture?type=' . $type;
         if($width){
             $url .= '&width=' . $width;
@@ -67,8 +79,7 @@ class YouniqueFacebook{
     public function getPhotoImageHTML($facebook_id, $type = self::PHOTO_TYPE_NORMAL, $options = array()){
 
         if(empty($facebook_id)){
-
-            return $this->Html->image("blank_profile_pic.svg", array("class" => "svg", "nopin" => "no-pin", "alt" => $order->buyer));
+            return null;
         }
 
         $output = '<img src="' . $this->getPhotoURL($facebook_id, $type) . '"';
@@ -90,9 +101,9 @@ class YouniqueFacebook{
 
     public function getFacebookObject(){
         return new \Facebook\Facebook([
-            'app_id' => set_env('FACEBOOK_APP_ID'),
-            'app_secret' => set_env('FACEBOOK_SECRET'),
-            'default_graph_version' => $this->version,
+            'app_id' => $this->getAppId(),
+            'app_secret' => $this->getSecret(),
+            'default_graph_version' => $this->getVersion(),
         ]);
     }
 
@@ -116,11 +127,11 @@ class YouniqueFacebook{
         <script type="text/javascript" data-meta="Facebook Init">
             window.fbAsyncInit = function() {
                 FB.init({
-                    appId      : ' . set_env('FACEBOOK_APP_ID') . ',
+                    appId      : ' . $this->getAppId() . ',
                     cookie     : ' . ($options['cookie'] ? 'true' : 'false') . ',
                     xfbml      : ' . ($options['xfbml'] ? 'true' : 'false') . ',
                     status     : ' . ($options['status'] ? 'true' : 'false') . ',
-                    version    : "' . $this->version . '"
+                    version    : "' . $this->getVersion() . '"
                 });
                 
                 ' . ($options['logPageView'] ? 'FB.AppEvents.logPageView();' : '') . '
