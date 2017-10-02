@@ -42,8 +42,13 @@ class YouniqueFacebook{
         return set_env('FACEBOOK_SECRET');
     }
 
-    private function getBaseURL(){
-        return 'https://graph.facebook.com/' . $this->getVersion();
+    /**
+     * The return path for retrieval of tokens
+     * Because it's dealing with authentication tokens, it should always use HTTPS
+     * @return string
+     */
+    public function getOauthRedirectUri(){
+        return 'https://' . $_SERVER['HTTP_HOST'] . '/api/oauth2/responseFrom/Facebook/';
     }
 
     /**
@@ -147,5 +152,12 @@ class YouniqueFacebook{
             }(document, "script", "facebook-jssdk"));
         </script>
         ';
+    }
+
+    /**
+     * Don't want external methods to use the URL directly
+     */
+    private function getBaseURL(){
+        return 'https://graph.facebook.com/' . $this->getVersion();
     }
 }
